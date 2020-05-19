@@ -1,47 +1,65 @@
 ﻿
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IfSwitchLoop : MonoBehaviour
 {
-    [Header("血量"), Range(0, 100)]
-    public int hp = 100;
-    [Header("道具")]
-    public string prop = "紅水";
+    //封裝欄位
+    //1.私人欄位
+    private float hp;
+    //2.屬性:讀寫或唯獨
+    public float Hp { get => sliderHp.value; set => hp = value; }
 
-    public int i = 1;
-    private int j = 1;
+    [Header("滑桿")]
+    public Slider sliderHp;
+    [Header("滑桿結果")]
+    public Text resultSlider;
 
-    [Header("地板")]
+    [Header("輸入欄位")]
+    public InputField inputField;
+    [Header("輸入欄位結果")]
+    public Text resultInputField;
+
+    [Header("方塊")]
     public GameObject cube;
 
-    private void CreateFloor(int length, int width)
+    private void Start()
     {
-        for (int j = 0; j < width; j++)
+        #region 練習 3
+        for (int i = 0; i < 10; i++)
         {
-            for (int i = j; i < length; i++)
+            for (int j = 0; j < (i + 1); j++)
             {
-
-                Instantiate(cube, new Vector3(j * 2, 0, i * 2), Quaternion.Euler(270, 0, 0));
+                Vector3 pos = new Vector3(i * 2, j * 2, 25);
+                Instantiate(cube, pos, Quaternion.identity);
             }
         }
+        #endregion
     }
-    private void Awake()
+
+    public void Update()
     {
-        CreateFloor(10, 10);
-    }
-    private void Update()
-    {
-        if (hp >= 70)
+        #region 練習 1
+        if (Hp <= 30)
         {
-            print("安全");
+            resultSlider.text = "危險";
         }
-        else if (hp >= 20)
+        else if(Hp <= 70)
         {
-            print("警告");
+            resultSlider.text = "警告";
         }
         else
         {
-            print("危險");
+            resultSlider.text = "安全";
         }
-    }        
+        #endregion
+
+        #region 練習 2
+        //輸入欄位結果.文字 = 如果 輸入 == 紅水 ? 恢復血量 : 如果 輸入 == 藍血 ? 恢復魔力 : "";
+        resultInputField.text = inputField.text == "紅水" ? "恢復血量" : inputField.text == "藍水" ? "恢復魔力" : "錯誤的資料";
+        #endregion
+    }
+
+   
+
 }
